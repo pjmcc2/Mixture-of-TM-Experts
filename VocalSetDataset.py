@@ -4,12 +4,11 @@ import torchaudio
 import pandas as pd
 
 
-class VocalSetDataset(torch.Dataset):
-    def __init__(self, annotations_file, transform=None, target_transform=None):
-        self.labels = pd.read_csv(annotations_file, delim_whitespace=True)
+class VocalSetDataset(torch.utils.data.Dataset):
+    def __init__(self, annotations_file_path, transform=None, target_transform=None):
+        self.labels = pd.read_csv(annotations_file_path, names=["path", "label", "duration"], dtype = {"path":"string", "label":"int64", "duration":"float64"})
         self.transform = transform
         self.target_transform = target_transform
-        self._max_duration = self.labels.max(axis=0)[-1]
 
     def __len__(self):
         return len(self.labels)
